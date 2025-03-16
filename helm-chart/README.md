@@ -5,7 +5,7 @@
 Add this Helm chart to your repository:
 
 ```sh
-helm repo add my-charts ttps://github.com/osa-ora/java-ocp-demo/helm-chart/
+helm repo add my-charts https://github.com/osa-ora/java-ocp-demo/helm-chart/
 helm repo update
 ```
 to install it:
