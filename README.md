@@ -323,7 +323,8 @@ Select an old revision e.g. revision 1, you'll notice the replica count is back 
 
 Note: To get the release revision file that we have deployed, you need just to clone the repository, execute "helm package . " while you are inside the "helm-chart" folder, then upload the helm release file into the release folder "java-ocp-demo-0.1.0.tgz", you can version your helm by editing "Chart.yaml" and change the current version "version: 0.1.0" if you have changed different yaml file contents or values.
 
-Note: the helm chart are using Quay.io hosted image in the location: quay.io/ooransa/java-ocp-demo:latest 
+Note: the helm chart are using Quay.io hosted image in the location: quay.io/ooransa/java-ocp-demo:latest but you can refer to any image registry visible and accessible by OpenShift cluster.
+
 This image was uploaded from the s2i using the skopeo command. 
 
 ```
