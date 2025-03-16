@@ -288,6 +288,57 @@ We send initial slack notification that the build started for a specific revisio
 Once a new version is deployed, you can just edit the gitops files so the argocd can reflect it on OpenShift.
 You can also modify anything you need to change, like number of replica and it will be reflected, if you need to use auto-scaling, then delete the replica count from the deployment.yaml file and let OpenShift manage it based on the configured auto-scaling capabilities.
 
+---
+### DEPLOYMENT OPTION 7: Deployment using Helm
 
+From OpenShift Web Terminal, write the following command:
 
-  
+```
+oc new-project test2 //or any other project name
+helm install my-java-app https://raw.githubusercontent.com/osa-ora/java-ocp-demo/main/helm-chart/releases/java-ocp-demo-0.1.0.tgz
+```
+<img width="1491" alt="Screenshot 2025-03-16 at 6 19 40 PM" src="https://github.com/user-attachments/assets/6f7889d4-a8ae-4bcc-a81a-e026d5d5f5f7" />
+
+The application components will be deployed successfully in this project.
+
+<img width="1194" alt="Screenshot 2025-03-16 at 6 21 12 PM" src="https://github.com/user-attachments/assets/5d44cc49-f5eb-482a-966f-caf06449953f" />
+
+You can edit the applicaton by go to Helm --> Upgrade .. 
+
+<img width="1187" alt="Screenshot 2025-03-16 at 6 21 58 PM" src="https://github.com/user-attachments/assets/9f220997-a30a-47a6-b9c9-4a605a20eaf1" />
+
+You can edit the values that specified during the release build for example change the replica count into 2, this will create a new revision.
+
+<img width="1183" alt="Screenshot 2025-03-16 at 6 24 16 PM" src="https://github.com/user-attachments/assets/aa2e7f40-04ea-454e-9739-b6e6d726ccca" />
+
+Now if you go the deployment you can see 2 replica count. 
+
+<img width="697" alt="Screenshot 2025-03-16 at 6 24 45 PM" src="https://github.com/user-attachments/assets/b488de5b-a1b0-4b91-83e8-4f6d3db46456" />
+
+You can rollback to the previous release by selecting any previous revisions that you have created by selecting rollback:
+
+<img width="1170" alt="Screenshot 2025-03-16 at 6 25 47 PM" src="https://github.com/user-attachments/assets/36647582-5f04-4e70-b1f8-738a179b07eb" />
+
+Select an old revision e.g. revision 1, you'll notice the replica count is back to 1.
+
+Note: To get the release revision file that we have deployed, you need just to clone the repository, execute "helm package . " while you are inside the "helm-chart" folder, then upload the helm release file into the release folder "java-ocp-demo-0.1.0.tgz", you can version your helm by editing "Chart.yaml" and change the current version "version: 0.1.0" if you have changed different yaml file contents or values.
+
+Note: the helm chart are using Quay.io hosted image in the location: quay.io/ooransa/java-ocp-demo:latest 
+This image was uploaded from the s2i using the skopeo command. 
+
+```
+skopeo copy --all \
+  --src-creds "$(oc whoami):$(oc whoami -t)" \
+  docker://default-route-openshift-image-registry.apps.cluster-........opentlc.com/test/java-ocp-demo:latest \
+  docker://quay.io/ooransa/java-ocp-demo:latest \
+  --dest-creds "ooransa:my_token"
+```
+Note that in order to expose OpenShift image registery you'll need to patch it:
+
+```
+oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+```
+See: https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/registry/securing-exposing-registry#registry-exposing-default-registry-manually_securing-exposing-registry
+
+This covers various options to deploy Java application into OpenShift.
+
