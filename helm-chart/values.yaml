@@ -1,0 +1,26 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/ooransa/java-ocp-demo
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+route:
+  enabled: true
+  host: ""
+  path: "/"
+
+env:
+  JAVA_OPTS: "-Xms512m -Xmx1024m"
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "1024Mi"
+    cpu: "500m"
