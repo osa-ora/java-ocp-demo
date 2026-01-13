@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: java-demo
-          image: 'image-registry.openshift-image-registry.svc:5000/dev/java--demo@sha256:bc14acb5da1ea3a9a794da48d0c1004dfcfdb5b4cef099ec8201fdf4f29e3300'
+          image: 'image-registry.openshift-image-registry.svc:5000/dev/java-demo@sha256:bc14acb5da1ea3a9a794da48d0c1004dfcfdb5b4cef099ec8201fdf4f29e3300'
           ports:
             - containerPort: 8080
               protocol: TCP
